@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,6 +19,7 @@ public class MyActivity extends Activity
     private connectTask conctTask = null;
     private SensorManager sensorManager;
     private Sensor sensor;
+
 
     private Button leftButton;
     private Button rightButton;
@@ -51,16 +53,30 @@ public class MyActivity extends Activity
     }
 
     private void initListeners() {
-        leftButton.setOnClickListener(new View.OnClickListener() {
+        leftButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-
+            public boolean onTouch(View v, MotionEvent event) {
+                if (tcpClient != null) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        tcpClient.sendMessage("clck_d_" + "lc");
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                        tcpClient.sendMessage("clck_u_" + "lc");
+                    }
+                }
+                return false;
             }
         });
-        rightButton.setOnClickListener(new View.OnClickListener() {
+        rightButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-
+            public boolean onTouch(View v, MotionEvent event) {
+                if (tcpClient != null) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        tcpClient.sendMessage("clck_d_" + "rc");
+                    } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                        tcpClient.sendMessage("clck_u_" + "rc");
+                    }
+                }
+                return false;
             }
         });
         connectButton.setOnClickListener(new ConnectButtonListener());
