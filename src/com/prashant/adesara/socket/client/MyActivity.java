@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -26,8 +32,10 @@ public class MyActivity extends Activity
     private MyCustomAdapter mAdapter;
     private TCPClient mTcpClient = null;
     private connectTask conctTask = null;
-    
-    @Override
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
+    @SuppressWarnings("deprecation")
+	@Override
     public void onCreate(Bundle savedInstanceState)
     {
         
@@ -64,6 +72,26 @@ public class MyActivity extends Activity
                 editText.setText("");
             }
         });
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        mSensorManager.registerListener(new SensorEventListener() {
+        	float[] history = {0f,0f};
+			@Override
+			public void onSensorChanged(SensorEvent event) {
+				
+                if (mTcpClient != null) 
+                {	
+                		mTcpClient.sendMessage("x"+event.values[0]+"y"+event.values[1]);
+                }
+			}
+			
+			@Override
+			public void onAccuracyChanged(Sensor sensor, int accuracy) {
+				// TODO Auto-generated method stub
+				
+			}
+		}, mSensor, SensorManager.SENSOR_DELAY_GAME);
     }
     
     /**
@@ -123,7 +151,7 @@ public class MyActivity extends Activity
     	try
 		{
     		System.out.println("onDestroy.");
-			mTcpClient.sendMessage("bye");
+			//mTcpClient.sendMessage("bye");
 			mTcpClient.stopClient();
 			conctTask.cancel(true);
 			conctTask = null;
