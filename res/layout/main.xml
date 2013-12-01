@@ -1,38 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ListView
-        android:id="@+id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:cacheColorHint="#00000000"
-        android:listSelector="@android:color/transparent"
-        android:transcriptMode="alwaysScroll" />
+    <View
+        android:id="@+id/main_center"
+        android:layout_width="0px"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        />
 
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="fill_parent"
+    <Button
+        android:id="@+id/main_left_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/main_status"
+        android:layout_toLeftOf="@id/main_center"/>
+
+    <Button
+        android:id="@+id/main_right_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/main_status"
+        android:layout_toRightOf="@id/main_center"/>
+
+    <TextView
+        android:id="@+id/main_status"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal" >
+        android:layout_above="@+id/main_connect_button"
+        />
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:inputType="textMultiLine|textNoSuggestions" />
+    <Button
+        android:id="@+id/main_connect_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/main_connect"/>
 
-        <Button
-            android:id="@+id/send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/send" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

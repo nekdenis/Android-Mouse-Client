@@ -3,5 +3,8 @@
 
     <string name="app_name">SocketAndroidClient</string>
     <string name="hello_world">Hello world!</string>
-    <string name="send">Send</string>
+
+    <string name="main_connect">Connect</string>
+    <string name="main_reconnect">Reconnect</string>
+    <string name="main_disconnect">Disconnect</string>
 </resources>
