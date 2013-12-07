@@ -8,12 +8,15 @@ import java.net.Socket;
 
 
 public class TCPClient {
- 
+
+    public static final String MESSAGE_START = "Server_hi!";
+    public static final String MESSAGE_END = "Server_bye!";
+
     private String serverMessage;
+    private String serverIP = "";
     /**
 	 * Specify the Server Ip Address here. Whereas our Socket Server is started.
 	 * */
-	public static final String SERVERIP = "192.168.0.101"; // your computer IP address
     public static final int SERVERPORT = 5657;
     private OnMessageReceived mMessageListener = null;
     private boolean mRun = false;
@@ -24,9 +27,10 @@ public class TCPClient {
     /**
      *  Constructor of the class. OnMessagedReceived listens for the messages received from server
      */
-    public TCPClient(final OnMessageReceived listener) 
+    public TCPClient(final OnMessageReceived listener, String serverIP)
     {
         mMessageListener = listener;
+        this.serverIP = serverIP;
     }
  
     /**
@@ -42,6 +46,7 @@ public class TCPClient {
     }
  
     public void stopClient(){
+        sendMessage(MESSAGE_END);
         mRun = false;
     }
     
@@ -51,7 +56,7 @@ public class TCPClient {
  
         try {
             //here you must put your computer's IP address.
-            InetAddress serverAddr = InetAddress.getByName(SERVERIP);
+            InetAddress serverAddr = InetAddress.getByName(serverIP);
  
             Log.e("TCP SI Client", "SI: Connecting...");
  
@@ -61,9 +66,9 @@ public class TCPClient {
           
                 //send the message to the server
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
- 
+
                 Log.e("TCP SI Client", "SI: Sent.");
- 
+                sendMessage(MESSAGE_START);
                 Log.e("TCP SI Client", "SI: Done.");
                 
                 //receive the message which the server sends back

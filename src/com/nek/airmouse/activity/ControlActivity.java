@@ -1,8 +1,9 @@
-package com.nek.airmouse.socket.client;
+package com.nek.airmouse.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,24 +13,35 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import com.prashant.adesara.socket.client.R;
+import com.nek.airmouse.R;
+import com.nek.airmouse.socket.client.TCPClient;
 
-public class MyActivity extends Activity
-{
+public class ControlActivity extends Activity {
+
+    private static final String EXTRA_IP = "EXTRA_IP";
+
     private com.nek.airmouse.socket.client.TCPClient tcpClient = null;
     private connectTask conctTask = null;
     private SensorManager sensorManager;
     private Sensor sensor;
 
+    private String ipAddress;
 
     private Button leftButton;
     private Button rightButton;
     private Button connectButton;
 
+    public static void startActivity(Context context, String ipAddress) {
+        Intent i = new Intent(context, ControlActivity.class);
+        i.putExtra(EXTRA_IP, ipAddress);
+        context.startActivity(i);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_control);
+        ipAddress = getIntent().getStringExtra(EXTRA_IP);
         initView();
         initListeners();
         initSensor();
@@ -92,7 +104,6 @@ public class MyActivity extends Activity
     private void closeConnection() {
         try
         {
-            tcpClient.sendMessage("bye");
             tcpClient.stopClient();
             conctTask.cancel(true);
             conctTask = null;
@@ -150,7 +161,7 @@ public class MyActivity extends Activity
 						e.printStackTrace();
 					}
                 }
-            });
+            }, ipAddress);
             tcpClient.run();
             if (tcpClient != null) {
                 publishProgress("connected");
