@@ -1,18 +1,11 @@
-package com.prashant.adesara.socket.client;
+package com.nek.airmouse.socket.client;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
 import android.util.Log;
 
-/**
- * @author Prashant Adesara
- * Handle the TCPClient with Socket Server. 
- * */
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+
 
 public class TCPClient {
  

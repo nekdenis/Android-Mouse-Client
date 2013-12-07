@@ -1,4 +1,4 @@
-package com.prashant.adesara.socket.client;
+package com.nek.airmouse.socket.client;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -12,10 +12,11 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import com.prashant.adesara.socket.client.R;
 
 public class MyActivity extends Activity
 {
-    private TCPClient tcpClient = null;
+    private com.nek.airmouse.socket.client.TCPClient tcpClient = null;
     private connectTask conctTask = null;
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -131,11 +132,11 @@ public class MyActivity extends Activity
         }, sensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
-    public class connectTask extends AsyncTask<String,String,TCPClient> {
+    public class connectTask extends AsyncTask<String,String, com.nek.airmouse.socket.client.TCPClient> {
         @Override
-        protected TCPClient doInBackground(String... message) 
+        protected com.nek.airmouse.socket.client.TCPClient doInBackground(String... message)
         {
-            tcpClient = new TCPClient(new TCPClient.OnMessageReceived() {
+            tcpClient = new com.nek.airmouse.socket.client.TCPClient(new TCPClient.OnMessageReceived() {
 
                 @Override
                 public void messageReceived(String message)
