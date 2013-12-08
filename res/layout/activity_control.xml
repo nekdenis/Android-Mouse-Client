@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
     <View
-        android:id="@+id/main_center"
+        android:id="@+id/mouse_center"
         android:layout_width="0px"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         />
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mouse_connect_button"
+        android:background="@drawable/mouse_bg"/>
     <Button
-        android:id="@+id/main_left_button"
+        android:id="@+id/mouse_left_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/main_status"
-        android:layout_toLeftOf="@id/main_center"/>
+        android:layout_above="@+id/mouse_connect_button"
+        android:layout_toLeftOf="@id/mouse_center"/>
 
     <Button
-        android:id="@+id/main_right_button"
+        android:id="@+id/mouse_right_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/main_status"
-        android:layout_toRightOf="@id/main_center"/>
-
-    <TextView
-        android:id="@+id/main_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/main_connect_button"
-        />
+        android:layout_above="@+id/mouse_connect_button"
+        android:layout_toRightOf="@id/mouse_center"/>
 
     <Button
-        android:id="@+id/main_connect_button"
+        android:id="@+id/mouse_scroll"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="#11000000"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_above="@+id/mouse_connect_button"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/mouse_connect_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

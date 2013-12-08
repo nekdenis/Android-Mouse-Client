@@ -1,6 +1,7 @@
 package com.nek.airmouse.activity;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +33,8 @@ public class ControlActivity extends Activity {
     private Button leftButton;
     private Button rightButton;
     private Button connectButton;
+    private Button scroll;
+    private GestureDetector scrollListener;
 
 
     public static void startActivity(Context context, String ipAddress) {
@@ -48,9 +52,6 @@ public class ControlActivity extends Activity {
         initView();
         initListeners();
         initSensor();
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            hideSystemUI();
-        }
 
     }
 
@@ -67,9 +68,14 @@ public class ControlActivity extends Activity {
     }
 
     private void initView(){
-        leftButton = (Button) findViewById(R.id.main_left_button);
-        rightButton = (Button) findViewById(R.id.main_right_button);
-        connectButton = (Button) findViewById(R.id.main_connect_button);
+        leftButton = (Button) findViewById(R.id.mouse_left_button);
+        rightButton = (Button) findViewById(R.id.mouse_right_button);
+        connectButton = (Button) findViewById(R.id.mouse_connect_button);
+        scroll = (Button) findViewById(R.id.mouse_scroll);
+        scrollListener = new GestureDetector(this, new ScrollListener());
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            hideSystemUI();
+        }
     }
 
     private void initListeners() {
@@ -100,6 +106,12 @@ public class ControlActivity extends Activity {
             }
         });
         connectButton.setOnClickListener(new ConnectButtonListener());
+        scroll.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return scrollListener.onTouchEvent(motionEvent);
+            }
+        });
     }
 
     @SuppressLint("NewApi")
@@ -191,6 +203,7 @@ public class ControlActivity extends Activity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void hideSystemUI() {
         mDecorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -201,6 +214,7 @@ public class ControlActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void showSystemUI() {
         mDecorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -222,5 +236,15 @@ public class ControlActivity extends Activity {
             initConnection();
         }
 
+    }
+
+    private class ScrollListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (tcpClient != null) {
+                tcpClient.sendMessage("scrl_"+(int) distanceY);
+            }
+            return true;
+        }
     }
 }
