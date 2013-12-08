@@ -3,18 +3,26 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.6.1+'
+        classpath 'com.android.tools.build:gradle:0.6.+'
     }
 }
+
 apply plugin: 'android'
 
-dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+repositories {
+    mavenCentral()
+    mavenLocal()
 }
 
+
 android {
-    compileSdkVersion 18
+    compileSdkVersion 19
     buildToolsVersion "19.0.0"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 19
+    }
 
     sourceSets {
         main {
@@ -39,4 +47,12 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
 }
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile group:'com.j256.ormlite', name:'ormlite-android', version:'4.47'
+    compile group:'com.j256.ormlite', name:'ormlite-core', version:'4.47'
+}
+

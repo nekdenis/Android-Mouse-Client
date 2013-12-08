@@ -11,9 +11,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import com.nek.airmouse.R;
 import com.nek.airmouse.adapter.ServerAdapter;
+import com.nek.airmouse.db.OpenHelper;
 import com.nek.airmouse.db.dto.ServerObj;
 import com.nek.airmouse.socket.client.ServerExplorer;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class MainActivity extends Activity {
         serverList = new ArrayList<ServerObj>();
         initView();
         initListeners();
+        loadFromHistory();
     }
 
     private void initView(){
@@ -47,9 +50,17 @@ public class MainActivity extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ControlActivity.startActivity(MainActivity.this, serverList.get(position).getIpAddress());
+                ServerObj server = serverList.get(position);
+                saveServer(server);
+                ControlActivity.startActivity(MainActivity.this, server.getIpAddress());
             }
         });
+    }
+
+    @SuppressLint("NewApi")
+    private void saveServer(ServerObj serverObj) {
+        AddToHistoryTask addToHistoryTask = new AddToHistoryTask(serverObj);
+        addToHistoryTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @SuppressLint("NewApi")
@@ -65,6 +76,12 @@ public class MainActivity extends Activity {
 
     private void setSearching() {
         searchButton.setVisibility(View.GONE);
+    }
+
+    @SuppressLint("NewApi")
+    private void loadFromHistory() {
+        LoadHistoryTask loadHistoryTask = new LoadHistoryTask();
+        loadHistoryTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public class SearchTask extends AsyncTask<String,String, ServerExplorer> {
@@ -114,6 +131,51 @@ public class MainActivity extends Activity {
         protected void onPostExecute(ServerExplorer serverExplorer) {
             super.onPostExecute(serverExplorer);
             setSearchFinished();
+        }
+    }
+
+    public class LoadHistoryTask extends AsyncTask<String,String, List<ServerObj>> {
+
+        @Override
+        protected List<ServerObj> doInBackground(String... message)
+        {
+            List<ServerObj> result = new ArrayList<ServerObj>();
+            OpenHelper helper = new OpenHelper(MainActivity.this);
+            try {
+                result.addAll(helper.getServerDao().queryForAll());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+
+        @Override
+        protected void onPostExecute(List<ServerObj> serverObjs) {
+            serverList.clear();
+            serverList.addAll(serverObjs);
+            serverAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public class AddToHistoryTask extends AsyncTask<String,String, Void> {
+
+        ServerObj objToAdd;
+
+        public AddToHistoryTask(ServerObj objToAdd) {
+            this.objToAdd = objToAdd;
+        }
+
+        @Override
+        protected Void doInBackground(String... message)
+        {
+            OpenHelper helper = new OpenHelper(MainActivity.this);
+            try {
+               helper.getServerDao().create(objToAdd);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 

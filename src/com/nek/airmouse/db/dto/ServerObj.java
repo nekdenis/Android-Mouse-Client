@@ -10,13 +10,10 @@ public class ServerObj implements Serializable {
     private static final String MESSAGE_NAME = "hostname = ";
     private static final String MESSAGE_MAC = "mac address = ";
 
-    @DatabaseField(generatedId = true)
-    private int id;
-
-    @DatabaseField()
+    @DatabaseField
     private String ipAddress;
 
-    @DatabaseField
+    @DatabaseField(id = true)
     private String macAddress;
 
     @DatabaseField
@@ -34,14 +31,6 @@ public class ServerObj implements Serializable {
         name = stringToParse.substring(stringToParse.indexOf(MESSAGE_NAME)+MESSAGE_NAME.length(), endIndex);
         stringToParse = stringToParse.substring(endIndex+2);
         macAddress= stringToParse.substring(stringToParse.indexOf(MESSAGE_MAC)+MESSAGE_MAC.length());
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getIpAddress() {
