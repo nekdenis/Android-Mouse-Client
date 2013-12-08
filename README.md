@@ -4,10 +4,12 @@ Android Mouse
 Use your Android device as air mouse! 
 
 RoadMap:
-- server list with history
-- udp connection
-- mouse scroll
-- impoved UI
+
+multi-monitor configuration
+alt-tab feature
+keyboard clicks
+changing horizontal position using data from other axis
+action bar buttons
 
 The Server code: 
 	https://github.com/nekdenis/Android-Mouse-Server
